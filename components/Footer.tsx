@@ -7,7 +7,15 @@ import { motion } from "framer-motion";
 import Magnetic from "@/components/animations/Magnetic";
 
 export default function Footer() {
-  const [particles, setParticles] = useState([]);
+  type Particle = {
+    x: number;
+    y: number;
+    opacity: number;
+    duration: number;
+    moveY: number;
+  };
+
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
     const generated = [...Array(20)].map(() => ({
