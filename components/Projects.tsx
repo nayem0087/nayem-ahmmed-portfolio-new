@@ -10,7 +10,7 @@ const projects = [
     tags: ['TypeScript', 'Next.js', 'Node.js'],
     link: 'https://digi-tools-interfaces.netlify.app/',
     github: 'https://github.com/Nayem0087/assignment-06',
-    image: '/digiTools.jpg',
+    image: '/digitools.jpg',
   },
   {
     title: 'KeenKeeper',
@@ -19,7 +19,7 @@ const projects = [
     tags: ['TypeScript', 'Next.js'],
     link: 'https://my-keen-keeper-app-pi.vercel.app/',
     github: 'https://github.com/nayem0087/my-keen-keeper-app',
-    image: '/keenKeeper.jpg',
+    image: '/keenkeeper.jpg',
   },
   {
     title: 'The Book Vibe',
