@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-// import SmoothScroll from '@/components/SmoothScroll';
+import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
-// import NoiseOverlay from '@/components/NoiseOverlay';
+import NoiseOverlay from '@/components/NoiseOverlay';
 import Navbar from '@/components/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -36,12 +36,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {/* <SmoothScroll> */}
+        <SmoothScroll>
           <CustomCursor />
-          {/* <NoiseOverlay /> */}
+          <NoiseOverlay />
           <Navbar />
           {children}
-        {/* </SmoothScroll> */}
+        </SmoothScroll>
       </body>
     </html>
   );
