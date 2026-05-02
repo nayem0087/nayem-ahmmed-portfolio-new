@@ -1,9 +1,9 @@
 import Hero from '@/components/Hero';
 import About from '@/components/About';
-// import TechStack from '@/components/TechStack';
-// import Skills from '@/components/Skills';
-// import Projects from '@/components/Projects';
-// import Qualification from '@/components/Qualification';
+import TechStack from '@/components/TechStack';
+import Skills from '@/components/Skills';
+import Projects from '@/components/Projects';
+import Qualification from '@/components/Qualification';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -11,10 +11,10 @@ export default function Home() {
     <main>
       <Hero />
       <About />
-      {/* <TechStack />
+      <TechStack />
       <Skills />
       <Projects />
-      <Qualification /> */}
+      <Qualification />
       <Footer />
     </main>
   );
