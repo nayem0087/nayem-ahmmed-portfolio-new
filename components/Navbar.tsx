@@ -38,10 +38,10 @@ export default function Navbar() {
         <Magnetic>
           <a href="#home" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-full overflow-hidden border border-white/20 group-hover:border-blue-500 transition-colors">
-              <img src="/profile.png" alt="Salman Shah" className="w-full h-full object-cover" />
+              <img src="/nayem.jpg" alt="nayem ahmmed" className="w-full h-full object-cover" />
             </div>
             <span className="text-xl font-bold text-white tracking-tighter hidden sm:block">
-              Salman Shah
+              Nayem Ahmmed
             </span>
           </a>
         </Magnetic>

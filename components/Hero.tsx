@@ -87,17 +87,17 @@ export default function Hero() {
             {/* Sidebar Socials */}
             <div className="hidden md:flex absolute left-6 md:left-10 flex-col gap-6 text-gray-400 z-50 hero-socials">
                 <Magnetic>
-                    <a target="_blank" href="https://www.linkedin.com/in/salman-ibn-riyaj/" className="p-2 block" rel="noopener noreferrer">
+                    <a target="_blank" href="https://www.linkedin.com/in/nayem-ahmmed/" className="p-2 block" rel="noopener noreferrer">
                         <FaLinkedin className="hover:text-blue-500 cursor-pointer text-2xl transition-colors" />
                     </a>
                 </Magnetic>
                 <Magnetic>
-                    <a target="_blank" href="https://github.com/salman-ibn-riyaj" className="p-2 block" rel="noopener noreferrer">
+                    <a target="_blank" href="https://github.com/nayem0087" className="p-2 block" rel="noopener noreferrer">
                         <FaGithub className="hover:text-white cursor-pointer text-2xl transition-colors" />
                     </a>
                 </Magnetic>
                 <Magnetic>
-                    <a target="_blank" href="https://x.com/salmanshahrz" className="p-2 block" rel="noopener noreferrer">
+                    <a target="_blank" href="https://x.com/NayemAhmmed87?t=hTPZMCKKEzfgmSgvi8iidg&s=09" className="p-2 block" rel="noopener noreferrer">
                         <FaTwitter className="hover:text-blue-400 cursor-pointer text-2xl transition-colors" />
                     </a>
                 </Magnetic>
@@ -111,7 +111,7 @@ export default function Hero() {
                 <div className="space-y-6">
                     <p className="text-xl hero-subtitle text-blue-400 font-medium">Hey, I&apos;m</p>
                     <h1 ref={textRef} className="text-4xl md:text-7xl font-bold tracking-tight">
-                        Salman Shah 👋
+                        Nayem Ahmmed 👋
                     </h1>
                     <p className="text-2xl text-gray-300 hero-subtitle">I am a Frontend Web Developer</p>
                     <p ref={descRef} className="text-gray-400 max-w-sm leading-relaxed text-lg">
@@ -121,7 +121,7 @@ export default function Hero() {
                     <div className="hero-btn pt-8 relative z-20">
                         <Magnetic>
                             <a
-                                href="https://mail.google.com/mail/?view=cm&fs=1&to=salmanibnriyaj@gmail.com"
+                                href="https://mail.google.com/mail/?view=cm&fs=1&to=nayemk0087@gmail.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center justify-center px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
@@ -145,8 +145,8 @@ export default function Hero() {
                         <div className="w-full h-full rounded-full bg-gradient-to-tr from-blue-900/50 to-purple-900/50 p-2 backdrop-blur-sm border border-white/10 shadow-2xl">
                             <div className="w-full h-full bg-slate-950 rounded-full overflow-hidden">
                                 <img
-                                    src="/profile.png"
-                                    alt="Salman Shah"
+                                    src="/nayem.jpg"
+                                    alt="Nayem Ahmmed"
                                     className="w-full h-full object-cover scale-110"
                                 />
                             </div>
