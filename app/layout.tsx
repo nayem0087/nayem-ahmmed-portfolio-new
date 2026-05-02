@@ -4,7 +4,7 @@ import './globals.css';
 // import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
 // import NoiseOverlay from '@/components/NoiseOverlay';
-// import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,7 +39,7 @@ export default function RootLayout({
         {/* <SmoothScroll> */}
           <CustomCursor />
           {/* <NoiseOverlay /> */}
-          {/* <Navbar /> */}
+          <Navbar />
           {children}
         {/* </SmoothScroll> */}
       </body>
