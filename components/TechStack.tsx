@@ -36,7 +36,7 @@ export default function TechStack() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
             Technologies

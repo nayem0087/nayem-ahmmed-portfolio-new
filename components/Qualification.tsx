@@ -7,19 +7,19 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 const educationData = [
   {
     title: 'SSC',
-    school: 'Idgah High School',
-    years: '2007 - 2012',
-    gpa: '4.63',
+    school: 'Montola High School',
+    years: '2018 - 2021',
+    gpa: '3.83',
     background: 'Science',
     subject: 'Higher Math',
   },
   {
     title: 'HSC',
-    school: 'Kapasia Degree College',
-    years: '2012 - 2014',
-    gpa: '4.70',
-    background: 'Science',
-    subject: 'Math',
+    school: 'Shah Jalal Govt. College',
+    years: '2022 - 2024',
+    gpa: '3.50',
+    background: 'Humanities',
+    subject: 'Statistics',
   },
 ];
 

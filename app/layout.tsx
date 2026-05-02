@@ -9,22 +9,22 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Salman Shah | Frontend Developer',
+  title: 'Nayem Ahmmed | Frontend Developer',
   description:
     'Frontend Developer passionate about creating beautiful, interactive, and high-performance web experiences.',
-  keywords: ['Frontend Developer', 'React', 'Next.js', 'Portfolio', 'Salman Shah'],
-  authors: [{ name: 'Salman Shah' }],
+  keywords: ['Frontend Developer', 'React', 'Next.js', 'Portfolio', 'Nayem Ahmmed'],
+  authors: [{ name: 'Nayem Ahmmed' }],
   icons: {
-    icon: '/profile.png',
-    shortcut: '/profile.png',
-    apple: '/profile.png',
+    icon: '/nayem.jpg',
+    shortcut: '/nayem.jpg',
+    apple: '/nayem.jpg',
   },
   openGraph: {
-    title: 'Salman Shah | Frontend Developer',
+    title: 'Nayem Ahmmed | Frontend Developer',
     description:
       'Frontend Developer passionate about creating beautiful, interactive, and high-performance web experiences.',
     type: 'website',
-    images: [{ url: '/profile.png' }],
+    images: [{ url: '/nayem.JPG' }],
   },
 };
 

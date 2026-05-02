@@ -8,18 +8,18 @@ const projects = [
     title: 'The Digi Tools',
     description: 'This is a platform where you can buy different types of digital tools.',
     tags: ['TypeScript', 'Next.js', 'Node.js'],
-    link: 'https://assignment-6-navy.vercel.app/',
-    github: 'https://github.com/salman-ibn-riyaj/assignment-6',
-    image: '/digiTools.png',
+    link: 'https://digi-tools-interfaces.netlify.app/',
+    github: 'https://github.com/Nayem0087/assignment-06',
+    image: '/digiTools.jpg',
   },
   {
     title: 'KeenKeeper',
     description:
       'An app built with Next.js 15 and Tailwind CSS, offering real-time chatting, collaboration, comments, and so on.',
     tags: ['TypeScript', 'Next.js'],
-    link: 'https://assignment-7-smoky-nine.vercel.app/',
-    github: 'https://github.com/salman-ibn-riyaj/assignment-7',
-    image: '/keenKeeper.png',
+    link: 'https://my-keen-keeper-app-pi.vercel.app/',
+    github: 'https://github.com/nayem0087/my-keen-keeper-app',
+    image: '/keenKeeper.jpg',
   },
   {
     title: 'The Book Vibe',
@@ -27,7 +27,7 @@ const projects = [
       'A modern platform built with Next.js and Tailwind CSS. Offers a chance to buy interesting books of novels or storybooks, also you can read them online.',
     tags: ['Next.js', 'React'],
     link: 'https://bok-vibe-project.vercel.app/',
-    github: 'https://github.com/salman-ibn-riyaj/bok-vibe-project',
+    github: 'https://github.com/nayem0087/book-vibe-stores',
     image: '/bookVibe.png',
   },
 ];
