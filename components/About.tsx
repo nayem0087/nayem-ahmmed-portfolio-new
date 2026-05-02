@@ -48,8 +48,8 @@ export default function About() {
             >
               <motion.img
                 style={{ y: imageY }}
-                src="/profile.png"
-                alt="Salman Shah"
+                src="/nayem.jpg"
+                alt="Nayem Ahmmed"
                 className="w-full h-[120%] object-cover absolute top-[-10%] transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(2,6,23,0.8)] pointer-events-none" />
