@@ -5,6 +5,13 @@ import SmoothScroll from '@/components/SmoothScroll';
 import CustomCursor from '@/components/CustomCursor';
 import NoiseOverlay from '@/components/NoiseOverlay';
 import Navbar from '@/components/Navbar';
+import ParticlesBackground from '@/components/ParticlesBackground';
+
+
+
+
+
+
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -36,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
+       <ParticlesBackground />
         <SmoothScroll>
           <CustomCursor />
           <NoiseOverlay />

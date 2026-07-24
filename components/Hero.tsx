@@ -115,7 +115,7 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative min-h-screen flex items-center justify-center bg-white dark:bg-slate-950 text-gray-900 dark:text-white overflow-x-hidden pt-32 pb-20 transition-colors duration-300"
+            className="relative min-h-screen flex items-center justify-center text-gray-900 dark:text-white overflow-x-hidden pt-32 pb-20 transition-colors duration-300"
             id="home"
         >
             {/* Background Gradient Blobs */}
