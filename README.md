@@ -26,34 +26,33 @@
 
 ---
 
-🌐 Portfolio Sections Overview
-Navbar Section (Navbar.tsx):
-A sticky navigation bar that stays fixed at the top during scrolling. It provides seamless navigation across different sections of the portfolio along with a theme switcher.
+## 🌐 Portfolio Sections Overview
 
-Hero Section (Hero.tsx):
-The primary landing view of the portfolio featuring an attractive introduction. It highlights your role as a developer with engaging typography and quick call-to-action buttons.
+* **Navbar Section (`Navbar.tsx`):**  
+  A sticky navigation bar that stays fixed at the top during scrolling. It provides seamless navigation across different sections of the portfolio along with a theme switcher.
 
-About Section (About.tsx):
-Provides a brief professional background, personal journey, and passion for web development. It gives visitors a clear insight into who you are as a creator.
+* **Hero Section (`Hero.tsx`):**  
+  The primary landing view of the portfolio featuring an attractive introduction. It highlights your role as a developer with engaging typography and quick call-to-action buttons.
 
-Skills & Tech Stack Sections (Skills.tsx & TechStack.tsx):
-Showcases your technical expertise and proficiency in modern frameworks and languages. It lists core tools like Next.js, TypeScript, and Tailwind CSS with clean visual badges.
+* **About Section (`About.tsx`):**  
+  Provides a brief professional background, personal journey, and passion for web development. It gives visitors a clear insight into who you are as a creator.
 
-Projects Section (Projects.tsx & ProjectCard.tsx):
-Features selected works with image previews, short descriptions, and tech tags. It includes direct links to live demos, GitHub repositories, and dedicated detail pages.
+* **Skills & Tech Stack Sections (`Skills.tsx` & `TechStack.tsx`):**  
+  Showcases your technical expertise and proficiency in modern frameworks and languages. It lists core tools like Next.js, TypeScript, and Tailwind CSS with clean visual badges.
 
-Qualification Section (Qualification.tsx):
-Highlights your educational milestones, certifications, and academic background. It uses an organized layout to showcase your continuous learning path.
+* **Projects Section (`Projects.tsx` & `ProjectCard.tsx`):**  
+  Features selected works with image previews, short descriptions, and tech tags. It includes direct links to live demos, GitHub repositories, and dedicated detail pages.
 
-Get In Touch Section (Contact.tsx):
-A dedicated contact section allowing visitors to easily reach out to you. It includes a clean message form and social links to encourage professional inquiries and collaborations.
+* **Qualification Section (`Qualification.tsx`):**  
+  Highlights your educational milestones, certifications, and academic background. It uses an organized layout to showcase your continuous learning path.
 
-Footer Section (Footer.tsx):
-The bottom section of the portfolio containing social media links, copyright information, and quick contact details. It leaves a lasting professional impression on visitors.
+* **Get In Touch Section (`Contact.tsx`):**  
+  A dedicated contact section allowing visitors to easily reach out to you. It includes a clean message form and social links to encourage professional inquiries and collaborations.
 
+* **Footer Section (`Footer.tsx`):**  
+  The bottom section of the portfolio containing social media links, copyright information, and quick contact details. It leaves a lasting professional impression on visitors.
 
-------
-
+---
 
 ## 🛠️ Technology Stack
 
@@ -80,7 +79,7 @@ NAYEM-AHMMED-PORTFOLIO/
 │   └── projects/             
 │       ├── page.tsx          # All Projects Grid Page
 │       └── [id]/page.tsx     # Dynamic Project Details Page
-├── components/               # Reusable UI components (ProjectCard, ThemeToggle, etc.)
+├── components/               # Reusable UI components (Navbar, Hero, Contact, ProjectCard, etc.)
 ├── data/                     
 │   └── projectsData.ts       # Centralized JSON/TS data for projects
 └── public/                   # Static assets (images, icons)
