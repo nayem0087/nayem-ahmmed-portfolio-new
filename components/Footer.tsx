@@ -30,14 +30,14 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-slate-950 border-t border-white/5 pt-20 pb-8 relative overflow-hidden"
+      className="bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-white/5 pt-20 pb-8 relative overflow-hidden transition-colors duration-300"
       id="contact-me"
     >
       {/* Floating Particles */}
       {particles.map((p, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-blue-500/30 rounded-full"
+          className="absolute w-1 h-1 bg-blue-500/20 dark:bg-blue-500/30 rounded-full"
           initial={{
             x: p.x,
             y: p.y,
@@ -55,8 +55,9 @@ export default function Footer() {
         />
       ))}
 
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-12 mb-16 relative z-10">
-        {/* Brand */}
+      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-16 relative z-10">
+        
+        {/* Column 1: Brand / About */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -64,35 +65,35 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="space-y-4"
         >
-          <h2 className="text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
             Nayem Ahmmed
           </h2>
-          <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
+          <p className="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
             Frontend Developer passionate about creating beautiful, interactive,
             and high-performance web experiences.
           </p>
         </motion.div>
 
-        {/* Quick Links */}
+        {/* Column 2: Quick Links */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h3 className="text-white font-semibold mb-6 tracking-wide">
+          <h3 className="text-slate-900 dark:text-white font-semibold mb-6 tracking-wide">
             Quick Links
           </h3>
-          <ul className="space-y-4 text-gray-400 text-sm">
+          <ul className="space-y-3 text-slate-600 dark:text-gray-400 text-sm">
             {["About", "Projects", "Qualification", "Contact Me"].map(
               (item) => (
                 <li key={item}>
                   <a
                     href={`#${item.toLowerCase().replace(" ", "-")}`}
-                    className="hover:text-blue-400 transition-colors inline-block relative group"
+                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors inline-block relative group"
                   >
                     {item}
-                    <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-blue-400 transition-all duration-300 group-hover:w-full" />
+                    <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full" />
                   </a>
                 </li>
               )
@@ -100,23 +101,41 @@ export default function Footer() {
           </ul>
         </motion.div>
 
-        {/* Connect */}
+        {/* Column 3: Expertise / Services */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <h3 className="text-slate-900 dark:text-white font-semibold mb-6 tracking-wide">
+            Expertise
+          </h3>
+          <ul className="space-y-3 text-slate-600 dark:text-gray-400 text-sm">
+            <li>React.js & Next.js</li>
+            <li>Tailwind CSS Design</li>
+            <li>MERN Stack Development</li>
+            <li>UI/UX Implementation</li>
+          </ul>
+        </motion.div>
+
+        {/* Column 4: Connect With Me */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <h3 className="text-white font-semibold mb-6 tracking-wide">
+          <h3 className="text-slate-900 dark:text-white font-semibold mb-6 tracking-wide">
             Connect With Me
           </h3>
-          <div className="flex gap-4">
+          <div className="flex gap-3 flex-wrap">
             <Magnetic>
               <a
                 href="https://github.com/nayem0087"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-slate-900 border border-white/10 text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors shadow-lg"
+                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-600 dark:hover:text-white transition-colors shadow-sm dark:shadow-lg"
               >
                 <FaGithub size={18} />
               </a>
@@ -127,7 +146,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/nayem-ahmmed/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-slate-900 border border-white/10 text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors shadow-lg"
+                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-600 dark:hover:text-white transition-colors shadow-sm dark:shadow-lg"
               >
                 <FaLinkedin size={18} />
               </a>
@@ -138,7 +157,7 @@ export default function Footer() {
                 href="https://x.com/NayemAhmmed87?t=hTPZMCKKEzfgmSgvi8iidg&s=09"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-slate-900 border border-white/10 text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors shadow-lg"
+                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-600 dark:hover:text-white transition-colors shadow-sm dark:shadow-lg"
               >
                 <FaTwitter size={18} />
               </a>
@@ -149,7 +168,7 @@ export default function Footer() {
                 href="https://mail.google.com/mail/?view=cm&fs=1&to=nayemk0087@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-10 h-10 bg-slate-900 border border-white/10 text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-colors shadow-lg"
+                className="flex items-center justify-center w-10 h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-gray-400 rounded-full hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:border-blue-600 dark:hover:text-white transition-colors shadow-sm dark:shadow-lg"
               >
                 <Mail size={18} />
               </a>
@@ -164,7 +183,7 @@ export default function Footer() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 1, delay: 0.6 }}
-        className="text-center text-gray-600 text-xs border-t border-white/5 pt-8 relative z-10"
+        className="text-center text-slate-500 dark:text-gray-600 text-xs border-t border-slate-200 dark:border-white/5 pt-8 relative z-10"
       >
         © 2026 Nayem Ahmmed. All rights reserved. Built with Next.js, Tailwind CSS
         & Framer Motion.

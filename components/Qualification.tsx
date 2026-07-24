@@ -40,12 +40,21 @@ const trainingData = [
     description: 'Advanced web development course focusing on React, Node.js, Express, and MongoDB.',
   },
   {
-    title: 'HTML, CSS & Tailwind CSS Mastery',
-    platform: 'Programming Hero / Self-Taught',
-    years: '2025',
-    category: 'Frontend Foundations',
-    description: 'Learned modern UI design, responsive layouts, and utility-first styling.',
-  },
+  title: 'Tailwind CSS Mastery',
+  platform: 'Programming Hero (Free-Bootcamp)',
+  years: '2025',
+  category: 'Frontend Foundations',
+  description:
+    'Learned utility-first CSS development, responsive design, custom layouts, component styling, and modern UI implementation using Tailwind CSS.',
+},
+  {
+  title: 'HTML5, CSS3',
+  platform: 'Programming Hero (Free-Bootcamp)',
+  years: '2025',
+  category: 'Frontend Foundations',
+  description:
+    'Learned the fundamentals of web development, including semantic HTML, CSS styling and modern web design principles.',
+},
 ];
 
 export default function Qualification() {
@@ -65,7 +74,7 @@ export default function Qualification() {
   return (
     <section className="py-32 px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white relative transition-colors duration-300 overflow-hidden" id="qualification">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -82,7 +91,7 @@ export default function Qualification() {
 
         {/* Two Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
+
           {/* Left Column: Education */}
           <div className="lg:col-span-6">
             <div className="flex justify-center gap-4 mb-12">
