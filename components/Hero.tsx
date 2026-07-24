@@ -1,16 +1,62 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa';
+import { Download } from 'lucide-react';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 import Magnetic from '@/components/animations/Magnetic';
+
+const ROLES = [
+    'Frontend Web Developer',
+    'Node.js Developer',
+    'React JS Developer',
+    'MERN Stack Developer',
+    'Web Developer',
+];
+
+function useTypingEffect(words: string[]) {
+    const [text, setText] = useState('');
+    const [wordIndex, setWordIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        const currentWord = words[wordIndex % words.length];
+        const typingSpeed = isDeleting ? 40 : 80;
+        const pauseBeforeDelete = 1400;
+        const pauseBeforeNext = 400;
+
+        let timeout: ReturnType<typeof setTimeout>;
+
+        if (!isDeleting && text === currentWord) {
+            timeout = setTimeout(() => setIsDeleting(true), pauseBeforeDelete);
+        } else if (isDeleting && text === '') {
+            timeout = setTimeout(() => {
+                setIsDeleting(false);
+                setWordIndex((prev) => (prev + 1) % words.length);
+            }, pauseBeforeNext);
+        } else {
+            timeout = setTimeout(() => {
+                setText((prev) =>
+                    isDeleting
+                        ? currentWord.slice(0, prev.length - 1)
+                        : currentWord.slice(0, prev.length + 1)
+                );
+            }, typingSpeed);
+        }
+
+        return () => clearTimeout(timeout);
+    }, [text, isDeleting, wordIndex, words]);
+
+    return text;
+}
 
 export default function Hero() {
     const containerRef = useRef<HTMLElement>(null);
     const textRef = useRef<HTMLHeadingElement>(null);
     const descRef = useRef<HTMLParagraphElement>(null);
+    const typedRole = useTypingEffect(ROLES);
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -48,7 +94,7 @@ export default function Hero() {
                 .fromTo(
                     '.hero-btn',
                     { scale: 0.8, opacity: 0 },
-                    { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)' },
+                    { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)', stagger: 0.1 },
                     '-=0.4'
                 )
                 .fromTo(
@@ -69,23 +115,23 @@ export default function Hero() {
     return (
         <section
             ref={containerRef}
-            className="relative min-h-screen flex items-center justify-center bg-slate-950 text-white overflow-x-hidden pt-32 pb-20"
+            className="relative min-h-screen flex items-center justify-center bg-white dark:bg-slate-950 text-gray-900 dark:text-white overflow-x-hidden pt-32 pb-20 transition-colors duration-300"
             id="home"
         >
             {/* Background Gradient Blobs */}
             <motion.div
-                className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none mix-blend-screen"
+                className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-blue-500/10 dark:bg-blue-600/20 rounded-full blur-[120px] pointer-events-none dark:mix-blend-screen"
                 animate={{ x: [0, 100, 0], y: [0, -50, 0], scale: [1, 1.1, 1] }}
                 transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
             />
             <motion.div
-                className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] bg-purple-600/20 rounded-full blur-[100px] pointer-events-none mix-blend-screen"
+                className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] bg-purple-500/10 dark:bg-purple-600/20 rounded-full blur-[100px] pointer-events-none dark:mix-blend-screen"
                 animate={{ x: [0, -80, 0], y: [0, 60, 0], scale: [1, 1.2, 1] }}
                 transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
             />
 
             {/* Sidebar Socials */}
-            <div className="hidden md:flex absolute left-6 md:left-10 flex-col gap-6 text-gray-400 z-50 hero-socials">
+            <div className="hidden md:flex absolute left-6 md:left-10 flex-col gap-6 text-gray-400 dark:text-gray-500 z-50 hero-socials">
                 <Magnetic>
                     <a target="_blank" href="https://www.linkedin.com/in/nayem-ahmmed/" className="p-2 block" rel="noopener noreferrer">
                         <FaLinkedin className="hover:text-blue-500 cursor-pointer text-2xl transition-colors" />
@@ -93,12 +139,17 @@ export default function Hero() {
                 </Magnetic>
                 <Magnetic>
                     <a target="_blank" href="https://github.com/nayem0087" className="p-2 block" rel="noopener noreferrer">
-                        <FaGithub className="hover:text-white cursor-pointer text-2xl transition-colors" />
+                        <FaGithub className="hover:text-gray-900 dark:hover:text-white cursor-pointer text-2xl transition-colors" />
                     </a>
                 </Magnetic>
                 <Magnetic>
                     <a target="_blank" href="https://x.com/NayemAhmmed87?t=hTPZMCKKEzfgmSgvi8iidg&s=09" className="p-2 block" rel="noopener noreferrer">
                         <FaTwitter className="hover:text-blue-400 cursor-pointer text-2xl transition-colors" />
+                    </a>
+                </Magnetic>
+                <Magnetic>
+                    <a target="_blank" href="https://www.facebook.com/share/199Svkezc8" className="p-2 block" rel="noopener noreferrer">
+                        <FaFacebook className="hover:text-blue-600 cursor-pointer text-2xl transition-colors" />
                     </a>
                 </Magnetic>
             </div>
@@ -109,24 +160,45 @@ export default function Hero() {
             >
                 {/* Left Content */}
                 <div className="space-y-6">
-                    <p className="text-xl hero-subtitle text-blue-400 font-medium">Hey, I&apos;m</p>
+                    <p className="text-xl hero-subtitle text-blue-600 dark:text-blue-400 font-medium">Hey, I&apos;m</p>
                     <h1 ref={textRef} className="text-4xl md:text-7xl font-bold tracking-tight">
-                        Nayem Ahmmed 👋
+                        Nayem <span className='text-blue-500'>Ahmmed</span> 👋
                     </h1>
-                    <p className="text-2xl text-gray-300 hero-subtitle">I am a Frontend Web Developer</p>
-                    <p ref={descRef} className="text-gray-400 max-w-sm leading-relaxed text-lg">
+
+                    {/* Designation — dynamic typing effect */}
+                    <p className="text-2xl text-gray-700 dark:text-gray-300 hero-subtitle min-h-[2.5rem]">
+                        I am a{' '}
+                        <span className="text-blue-600 dark:text-blue-400 font-semibold">
+                            {typedRole}
+                            <span className="inline-block w-[2px] h-6 bg-blue-600 dark:bg-blue-400 ml-1 align-middle animate-pulse" />
+                        </span>
+                    </p>
+
+                    <p ref={descRef} className="text-gray-600 dark:text-gray-400 max-w-sm leading-relaxed text-lg">
                         🚀 Turning ideas into stunning interactive experiences 💻 | Available for freelance
                         projects 🌟
                     </p>
-                    <div className="hero-btn pt-8 relative z-20">
+
+                    <div className="hero-btn pt-8 relative z-20 flex flex-wrap items-center gap-4">
                         <Magnetic>
                             <a
                                 href="https://mail.google.com/mail/?view=cm&fs=1&to=nayemk0087@gmail.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center justify-center px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
+                                className="inline-flex items-center justify-center px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-black font-bold rounded-full hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white transition-colors duration-300 shadow-[0_0_20px_rgba(0,0,0,0.15)] dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)]"
                             >
                                 Say Hello
+                            </a>
+                        </Magnetic>
+
+                        {/* Resume Download Button */}
+                        <Magnetic>
+                            <a
+                                href="https://drive.google.com/file/d/1vGGti64ep1aZoJX9n8fuFjWUhyW9-q0W/view?usp=drive_link"
+                                download
+                                className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-200 font-bold rounded-full hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
+                            >
+                                <Download size={16} /> Download Resume
                             </a>
                         </Magnetic>
                     </div>
@@ -142,8 +214,8 @@ export default function Hero() {
                         {/* Glowing Rings */}
                         <div className="absolute inset-0 rounded-full border border-blue-500/30 animate-[spin_10s_linear_infinite]" />
                         <div className="absolute inset-2 rounded-full border border-purple-500/20 animate-[spin_15s_linear_infinite_reverse]" />
-                        <div className="w-full h-full rounded-full bg-gradient-to-tr from-blue-900/50 to-purple-900/50 p-2 backdrop-blur-sm border border-white/10 shadow-2xl">
-                            <div className="w-full h-full bg-slate-950 rounded-full overflow-hidden">
+                        <div className="w-full h-full rounded-full bg-gradient-to-tr from-blue-100/60 to-purple-100/60 dark:from-blue-900/50 dark:to-purple-900/50 p-2 backdrop-blur-sm border border-gray-200 dark:border-white/10 shadow-2xl">
+                            <div className="w-full h-full bg-white dark:bg-slate-950 rounded-full overflow-hidden">
                                 <img
                                     src="/nayem.jpg"
                                     alt="Nayem Ahmmed"
@@ -161,7 +233,7 @@ export default function Hero() {
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-                <span className="text-gray-500 text-xs tracking-widest uppercase">Scroll</span>
+                <span className="text-gray-400 dark:text-gray-500 text-xs tracking-widest uppercase">Scroll</span>
                 <div className="w-[1px] h-10 bg-gradient-to-b from-blue-500 to-transparent" />
             </motion.div>
         </section>
