@@ -9,9 +9,7 @@ import SplitType from 'split-type';
 import Magnetic from '@/components/animations/Magnetic';
 
 const ROLES = [
-    'Frontend Web Developer',
-    'Node.js Developer',
-    'React JS Developer',
+    'Frontend Developer',
     'MERN Stack Developer',
     'Web Developer',
 ];
