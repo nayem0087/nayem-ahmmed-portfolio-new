@@ -6,6 +6,7 @@ import CustomCursor from '@/components/CustomCursor';
 import NoiseOverlay from '@/components/NoiseOverlay';
 import Navbar from '@/components/Navbar';
 import ParticlesBackground from '@/components/ParticlesBackground';
+import Footer from '@/components/Footer';
 
 
 
@@ -49,6 +50,7 @@ export default function RootLayout({
           <NoiseOverlay />
           <Navbar />
           {children}
+          <Footer />
         </SmoothScroll>
       </body>
     </html>

@@ -2,43 +2,16 @@
 
 import { motion } from 'framer-motion';
 import { ProjectCard } from './ProjectCard';
-
-const projects = [
-  {
-    title: 'The Digi Tools',
-    description: 'This is a platform where you can buy different types of digital tools.',
-    tags: ['TypeScript', 'Next.js', 'Node.js'],
-    link: 'https://digi-tools-interfaces.netlify.app/',
-    github: 'https://github.com/Nayem0087/assignment-06',
-    image: '/digitools.jpg',
-  },
-  {
-    title: 'KeenKeeper',
-    description:
-      'An app built with Next.js 15 and Tailwind CSS, offering real-time chatting, collaboration, comments, and so on.',
-    tags: ['TypeScript', 'Next.js'],
-    link: 'https://my-keen-keeper-app-pi.vercel.app/',
-    github: 'https://github.com/nayem0087/my-keen-keeper-app',
-    image: '/keenkeeper.jpg',
-  },
-  {
-    title: 'The Book Vibe',
-    description:
-      'A modern platform built with Next.js and Tailwind CSS. Offers a chance to buy interesting books of novels or storybooks, also you can read them online.',
-    tags: ['Next.js', 'React'],
-    link: 'https://bok-vibe-project.vercel.app/',
-    github: 'https://github.com/nayem0087/book-vibe-stores',
-    image: '/bookVibe.png',
-  },
-];
+import { allProjects } from '@/data/projectsData';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 export default function Projects() {
-  return (
-    <section className="py-32 px-6 bg-slate-950 relative" id="projects">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 left-0 w-[30rem] h-[30rem] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 -translate-x-1/2" />
+  const featuredProjects = allProjects.slice(0, 3);
 
-      <div className="max-w-7xl mx-auto relative z-10">
+  return (
+    <section className="py-32 px-6 bg-white dark:bg-slate-950 relative transition-colors duration-300" id="projects">
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -46,18 +19,31 @@ export default function Projects() {
           transition={{ duration: 0.8 }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight">
             Projects
           </h2>
-          <p className="text-blue-400 font-medium tracking-widest uppercase text-sm">
-            Selected Works
-          </p>
+          <p className='max-w-3xl mx-auto text-gray-600'>A selection of projects demonstrating my expertise in modern web development, problem-solving, and creating responsive, user-focused applications.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <ProjectCard key={index} {...project} index={index} />
+        {/* 3 Project Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {featuredProjects.map((project, index) => (
+            <ProjectCard key={project.id} {...project} index={index} />
           ))}
+        </div>
+
+        {/* Browse More Projects Button */}
+        <div className="flex justify-center">
+          <Link href="/projects">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-blue-600 text-white font-bold text-base shadow-[0_0_20px_rgba(59,130,246,0.5)] hover:bg-blue-500 transition-all duration-300 cursor-pointer group"
+            >
+              Browse More Projects
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </motion.div>
+          </Link>
         </div>
       </div>
     </section>
