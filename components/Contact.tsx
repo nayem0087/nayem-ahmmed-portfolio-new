@@ -120,7 +120,7 @@ export default function Contact() {
                                 className="flex items-center gap-5 p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md group"
                             >
                                 <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform flex-shrink-0">
-                                    <LogoLinkedin size={22} />
+                                    <LogoLinkedin />
                                 </div>
                                 <div className="overflow-hidden">
                                     <p className="text-xs text-slate-500 dark:text-gray-400 uppercase tracking-wider font-semibold">LinkedIn</p>
@@ -135,7 +135,7 @@ export default function Contact() {
                                 className="flex items-center gap-5 p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md group"
                             >
                                 <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-900 dark:text-white group-hover:scale-110 transition-transform flex-shrink-0">
-                                    <LogoGithub size={22} />
+                                    <LogoGithub />
                                 </div>
                                 <div className="overflow-hidden">
                                     <p className="text-xs text-slate-500 dark:text-gray-400 uppercase tracking-wider font-semibold">GitHub</p>
