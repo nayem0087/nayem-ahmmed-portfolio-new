@@ -12,7 +12,7 @@ const navItems = [
   { label: 'Skills', slug: 'skills' },
   { label: 'Projects', slug: 'projects' },
   { label: 'Qualification', slug: 'qualification' },
-  { label: 'Contact Me', slug: 'contact-me' },
+  { label: 'Contact Me', slug: 'contact' },
 ];
 
 export default function Navbar() {
@@ -54,10 +54,12 @@ export default function Navbar() {
             <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-300 dark:border-white/20 group-hover:border-blue-500 transition-colors duration-300">
               <img src="/nayem.jpg" alt="nayem ahmmed" className="w-full h-full object-cover" />
             </div>
-            <div className="hidden sm:flex flex-col leading-none">
-              <span className="text-lg font-bold tracking-tight text-gray-900 dark:text-white">
-                Nayem <span className="text-blue-600 dark:text-blue-500">Ahmmed</span>
-              </span>
+            <div className="flex flex-col leading-none">
+              <h1 className="text-xl font-bold italic tracking-wider">
+                <span className="bg-gradient-to-r from-blue-600 via-fuchsia-500 to-violet-600 bg-clip-text text-transparent">
+                  Nayem Ahmmed
+                </span>
+              </h1>
             </div>
           </a>
         </Magnetic>
@@ -89,7 +91,7 @@ export default function Navbar() {
 
           {/* Hire Me Button (Desktop) */}
           <a
-            href="#contact-me"
+            href="#contact"
             className="hidden sm:flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition shadow-md shadow-blue-500/20"
           >
             <Briefcase size={16} /> Hire Me
@@ -147,7 +149,7 @@ export default function Navbar() {
 
           {/* Hire Me Button (Mobile) */}
           <motion.a
-            href="#contact-me"
+            href="#contact"
             onClick={handleLinkClick}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : -20 }}

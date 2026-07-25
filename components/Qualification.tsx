@@ -72,7 +72,7 @@ export default function Qualification() {
   });
 
   return (
-    <section className="py-32 px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white relative transition-colors duration-300 overflow-hidden" id="qualification">
+    <section className="md:py-32 py-16 px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white relative transition-colors duration-300 overflow-hidden" id="qualification">
       <div className="max-w-6xl mx-auto">
 
         {/* Section Header */}

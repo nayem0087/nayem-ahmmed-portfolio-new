@@ -11,7 +11,7 @@ export default function About() {
   return (
     <section
       ref={containerRef}
-      className="py-24 sm:py-28 md:py-32 px-4 sm:px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white relative overflow-hidden transition-colors duration-300"
+      className="md:py-24 py-14 md:py-32 px-4 sm:px-6 bg-white dark:bg-slate-950 text-slate-900 dark:text-white relative overflow-hidden transition-colors duration-300"
       id="about"
     >
       <div className="max-w-6xl mx-auto">
@@ -119,7 +119,7 @@ export default function About() {
             <div className="pt-2">
               <Magnetic>
                 <a
-                  href="#contact-me"
+                  href="#contact"
                   className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/25 group"
                 >
                   Get in Touch

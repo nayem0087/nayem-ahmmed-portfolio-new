@@ -10,7 +10,7 @@ export default function Projects() {
   const featuredProjects = allProjects.slice(0, 3);
 
   return (
-    <section className="py-32 px-6 bg-white dark:bg-slate-950 relative transition-colors duration-300" id="projects">
+    <section className="md:py-32 py-16 px-6 bg-white dark:bg-slate-950 relative transition-colors duration-300" id="projects">
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -26,7 +26,7 @@ export default function Projects() {
         </motion.div>
 
         {/* 3 Project Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:mb-16 mb-8">
           {featuredProjects.map((project, index) => (
             <ProjectCard key={project.id} {...project} index={index} />
           ))}

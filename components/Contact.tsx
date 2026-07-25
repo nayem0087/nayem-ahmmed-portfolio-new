@@ -41,7 +41,7 @@ export default function Contact() {
     };
 
     return (
-        <section className="py-24 px-6 bg-slate-50 dark:bg-slate-950 relative transition-colors duration-300" id="contact">
+        <section className="md:py-24 py-14 px-6 bg-slate-50 dark:bg-slate-950 relative transition-colors duration-300" id="contact">
             <div className="max-w-6xl mx-auto">
 
                 {/* Section Heading */}
@@ -114,7 +114,7 @@ export default function Contact() {
                             </div>
 
                             <a
-                                href="https://linkedin.com"
+                                href="https://www.linkedin.com/in/nayem-ahmmed"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-5 p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md group"
@@ -129,7 +129,7 @@ export default function Contact() {
                             </a>
 
                             <a
-                                href="https://github.com"
+                                href="https://github.com/nayem0087"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-5 p-5 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 hover:border-blue-500/50 transition-all duration-300 shadow-sm hover:shadow-md group"

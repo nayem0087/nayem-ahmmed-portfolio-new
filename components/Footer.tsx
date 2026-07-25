@@ -85,7 +85,7 @@ export default function Footer() {
             Quick Links
           </h3>
           <ul className="space-y-3 text-slate-600 dark:text-gray-400 text-sm">
-            {["About", "Projects", "Qualification", "Contact Me"].map(
+            {["About", "Projects", "Qualification", "Contact"].map(
               (item) => (
                 <li key={item}>
                   <a

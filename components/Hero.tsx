@@ -192,6 +192,7 @@ export default function Hero() {
                         {/* Resume Download Button */}
                         <Magnetic>
                             <a
+                                target='blank'
                                 href="https://drive.google.com/file/d/1vGGti64ep1aZoJX9n8fuFjWUhyW9-q0W/view?usp=drive_link"
                                 download
                                 className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-200 font-bold rounded-full hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
