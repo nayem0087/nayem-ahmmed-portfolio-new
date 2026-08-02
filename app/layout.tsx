@@ -44,7 +44,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-       <ParticlesBackground />
+        <ParticlesBackground />
+        <ParticlesBackground theme="light" />
+        <ParticlesBackground theme="dark" count={200} />
         <SmoothScroll>
           <CustomCursor />
           <NoiseOverlay />
