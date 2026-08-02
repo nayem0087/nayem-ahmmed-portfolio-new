@@ -26,20 +26,33 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
  *  - Theme-aware: works on both light and dark backgrounds. Pass `theme="light"`
  *    or `theme="dark"` explicitly, or leave `theme="auto"` (default) to follow
  *    the OS/browser `prefers-color-scheme`, updating live if it changes.
+ *  - Depth-layered ("parallax") particles: each dot is assigned a random depth.
+ *    Nearer particles are bigger, brighter and drift faster; farther ones are
+ *    smaller, dimmer and slower. This reads as a polished, layered starfield
+ *    instead of a flat wall of identical dots — the standard technique used
+ *    in premium hero-section backgrounds.
+ *
+ * NOTE ON DENSITY (updated):
+ *  The previous defaults (count=800, opacityRange up to 0.9, glow=8) read as
+ *  too dense/bright for most layouts. Defaults below are tuned for a subtle,
+ *  ambient feel: fewer particles, lower opacity ceiling, softer glow. Pass
+ *  props to override if you want it denser/brighter again.
  */
 
 export interface ParticlesBackgroundProps {
-  /** Number of particles to render. Default: 350 */
+  /** Number of particles to render. Default: 200 (subtle, ambient density). */
   count?: number;
   /**
    * Particle color (any valid CSS color). If omitted, a sensible default is
    * chosen automatically based on `theme` (white on dark, dark slate on light).
    */
   color?: string;
-  /** Min/max particle radius in px. Default: [0.5, 2] (small, subtle dots) */
+  /** Min/max particle radius in px, at closest depth. Default: [0.5, 1.8] */
   sizeRange?: [number, number];
-  /** Min/max vertical drift speed (px/sec). Default: [4, 10] */
+  /** Min/max vertical drift speed (px/sec), at closest depth. Default: [8, 20] */
   speedRange?: [number, number];
+  /** Min/max base opacity, at farthest/closest depth. Default: [0.08, 0.5] */
+  opacityRange?: [number, number];
   /** Glow blur amount in px. If omitted, chosen automatically based on `theme`. */
   glow?: number;
   /**
@@ -65,23 +78,30 @@ type ParticleState = {
   speed: number;
   phase: number;
   swayAmplitude: number;
+  /** 0 = farthest layer, 1 = nearest layer. Drives size/speed/opacity. */
+  depth: number;
+  baseOpacity: number;
 };
 
-const DEFAULT_SIZE_RANGE: [number, number] = [0.5, 2];
-const DEFAULT_SPEED_RANGE: [number, number] = [4, 10];
+// Tuned down from the original [0.5, 2] / [10, 28] / [0.15, 0.9] so the field
+// reads as a light ambient dusting rather than a dense, bright wall of dots.
+const DEFAULT_SIZE_RANGE: [number, number] = [0.5, 1.8];
+const DEFAULT_SPEED_RANGE: [number, number] = [8, 20];
+const DEFAULT_OPACITY_RANGE: [number, number] = [0.08, 0.5];
+const DEFAULT_COUNT = 200;
 
 const THEME_PRESETS = {
   dark: {
-    color: 'rgba(255,255,255,0.85)',
-    glow: 6,
-    blobColorTopLeft: 'rgba(34,197,94,0.10)',
-    blobColorBottomRight: 'rgba(168,85,247,0.10)',
+    color: 'rgba(168,85,247,0.9)', // violet-500 — matches the reference screenshot
+    glow: 4,
+    blobColorTopLeft: 'rgba(139,92,246,0.10)',
+    blobColorBottomRight: 'rgba(88,28,135,0.14)',
   },
   light: {
-    color: 'rgba(15,23,42,0.45)', // slate-900 at low opacity — visible but not harsh on light bg
-    glow: 1,
-    blobColorTopLeft: 'rgba(34,197,94,0.08)',
-    blobColorBottomRight: 'rgba(168,85,247,0.08)',
+    color: 'rgba(109,40,217,0.45)', // violet-800 at low opacity for light backgrounds
+    glow: 1.5,
+    blobColorTopLeft: 'rgba(139,92,246,0.06)',
+    blobColorBottomRight: 'rgba(88,28,135,0.06)',
   },
 } as const;
 
@@ -90,10 +110,11 @@ function randomBetween(min: number, max: number): number {
 }
 
 export default function ParticlesBackground({
-  count = 350,
+  count = DEFAULT_COUNT,
   color,
   sizeRange = DEFAULT_SIZE_RANGE,
   speedRange = DEFAULT_SPEED_RANGE,
+  opacityRange = DEFAULT_OPACITY_RANGE,
   glow,
   theme = 'auto',
   blobColorTopLeft,
@@ -132,18 +153,25 @@ export default function ParticlesBackground({
       particlesRef.current = Array.from({ length: count }, () => {
         const x = Math.random() * width;
         const y = Math.random() * height;
+        // depth: 0 = farthest (small, dim, slow), 1 = nearest (big, bright, fast).
+        // Weighted toward smaller/farther particles so the field reads as a
+        // natural distribution rather than everything looking the same size.
+        const depth = Math.pow(Math.random(), 1.6);
         return {
           x,
           y,
           baseX: x,
-          size: randomBetween(sizeRange[0], sizeRange[1]),
-          speed: randomBetween(speedRange[0], speedRange[1]),
+          size: sizeRange[0] + (sizeRange[1] - sizeRange[0]) * depth,
+          speed: speedRange[0] + (speedRange[1] - speedRange[0]) * depth,
           phase: Math.random() * Math.PI * 2,
-          swayAmplitude: randomBetween(6, 18),
+          swayAmplitude: randomBetween(4, 20),
+          depth,
+          baseOpacity:
+            opacityRange[0] + (opacityRange[1] - opacityRange[0]) * depth,
         };
       });
     },
-    [count, sizeRange, speedRange]
+    [count, sizeRange, speedRange, opacityRange]
   );
 
   useEffect(() => {
@@ -156,6 +184,29 @@ export default function ParticlesBackground({
     const prefersReducedMotion = window.matchMedia(
       '(prefers-reduced-motion: reduce)'
     ).matches;
+
+    // --- Pre-render a soft radial "glow" sprite once, offscreen. ---
+    // Stamping this with drawImage per-particle is far cheaper than setting
+    // ctx.shadowBlur + filling a shape per-particle every frame, which is a
+    // well-known perf cliff in Canvas2D (especially on Safari/mobile) once
+    // you're drawing hundreds of glowing shapes per frame.
+    const SPRITE_SIZE = 64;
+    const spriteCanvas = document.createElement('canvas');
+    spriteCanvas.width = SPRITE_SIZE;
+    spriteCanvas.height = SPRITE_SIZE;
+    const spriteCtx = spriteCanvas.getContext('2d');
+    if (spriteCtx) {
+      const cx = SPRITE_SIZE / 2;
+      const cy = SPRITE_SIZE / 2;
+      const gradient = spriteCtx.createRadialGradient(cx, cy, 0, cx, cy, cx);
+      // Extract the rgb channel of resolvedColor so we can build a gradient
+      // that fades this exact hue out to fully transparent.
+      gradient.addColorStop(0, resolvedColor);
+      gradient.addColorStop(0.4, resolvedColor);
+      gradient.addColorStop(1, 'rgba(0,0,0,0)');
+      spriteCtx.fillStyle = gradient;
+      spriteCtx.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
+    }
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -187,9 +238,6 @@ export default function ParticlesBackground({
       lastTimeRef.current = time;
 
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = resolvedColor;
-      ctx.shadowColor = resolvedColor;
-      ctx.shadowBlur = resolvedGlow;
 
       for (const p of particlesRef.current) {
         if (!prefersReducedMotion) {
@@ -198,13 +246,30 @@ export default function ParticlesBackground({
             p.y = height + 10;
             p.baseX = Math.random() * width;
           }
-          p.phase += dt * 0.6;
+          p.phase += dt * (0.4 + p.depth * 0.4);
           p.x = p.baseX + Math.sin(p.phase) * p.swayAmplitude;
         }
 
-        ctx.globalAlpha = 0.4 + 0.4 * (0.5 + 0.5 * Math.sin(p.phase));
+        // Gentle twinkle around each particle's own base opacity, plus a
+        // wider glow halo for nearer (larger) particles.
+        const twinkle = 0.75 + 0.25 * Math.sin(p.phase * 1.3);
+        ctx.globalAlpha = p.baseOpacity * twinkle;
+
+        const haloSize = p.size * (4 + p.depth * (resolvedGlow / 2));
+        ctx.drawImage(
+          spriteCanvas,
+          p.x - haloSize / 2,
+          p.y - haloSize / 2,
+          haloSize,
+          haloSize
+        );
+
+        // Crisp bright core on top of the soft halo, so particles still
+        // read as sharp points up close, not just blurry blobs.
+        ctx.globalAlpha = p.baseOpacity * twinkle;
+        ctx.fillStyle = resolvedColor;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
         ctx.fill();
       }
 
