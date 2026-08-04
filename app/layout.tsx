@@ -8,12 +8,6 @@ import Navbar from '@/components/Navbar';
 import ParticlesBackground from '@/components/ParticlesBackground';
 import Footer from '@/components/Footer';
 
-
-
-
-
-
-
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -44,9 +38,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <ParticlesBackground />
-        <ParticlesBackground theme="light" />
-        <ParticlesBackground theme="dark" count={200} />
+        <ParticlesBackground count={100} />
         <SmoothScroll>
           <CustomCursor />
           <NoiseOverlay />

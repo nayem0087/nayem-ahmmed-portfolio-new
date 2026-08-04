@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa';
-import { Eye } from 'lucide-react';
+import { Eye, MapPin } from 'lucide-react';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 import Magnetic from '@/components/animations/Magnetic';
@@ -100,6 +100,18 @@ export default function Hero() {
                     { x: -50, opacity: 0 },
                     { x: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power3.out' },
                     '-=0.8'
+                )
+                .fromTo(
+                    '.hero-avatar',
+                    { scale: 0.85, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 0.9, ease: 'power3.out' },
+                    '-=1.0'
+                )
+                .fromTo(
+                    '.hero-badge',
+                    { y: 16, opacity: 0, scale: 0.9 },
+                    { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.6)' },
+                    '-=0.4'
                 );
 
             return () => {
@@ -204,23 +216,61 @@ export default function Hero() {
                 </div>
 
                 {/* Right Content — Avatar */}
-                <div className="relative flex justify-center md:justify-end">
+                <div className="relative flex justify-center md:justify-end hero-avatar">
                     <motion.div
                         className="w-72 h-72 md:w-96 md:h-96 relative"
-                        animate={{ y: [-10, 10, -10], rotate: [-2, 2, -2] }}
+                        animate={{ y: [-8, 8, -8] }}
                         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                        {/* Glowing Rings */}
-                        <div className="absolute inset-0 rounded-full border border-blue-500/30 animate-[spin_10s_linear_infinite]" />
-                        <div className="absolute inset-2 rounded-full border border-purple-500/20 animate-[spin_15s_linear_infinite_reverse]" />
-                        <div className="w-full h-full rounded-full bg-gradient-to-tr from-blue-100/60 to-purple-100/60 dark:from-blue-900/50 dark:to-purple-900/50 p-2 backdrop-blur-sm border border-gray-200 dark:border-white/10 shadow-2xl">
-                            <div className="w-full h-full bg-white dark:bg-slate-950 rounded-full overflow-hidden">
+                        {/* Isolated wrapper for the rotating glow ring only —
+                            kept separate from the photo + badge so nothing
+                            else ever inherits this rotation. Thin ring with a
+                            clear bright arc so the spin is visibly noticeable,
+                            not just a static blurred halo. */}
+                        <div className="absolute -inset-2 rounded-full overflow-hidden pointer-events-none">
+                            <motion.div
+                                className="absolute inset-0 blur-[3px]"
+                                style={{
+                                    background:
+                                        'conic-gradient(from 0deg, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.15) 55%, rgba(196,133,255,0.9) 68%, rgba(147,51,234,1) 75%, rgba(196,133,255,0.9) 82%, rgba(168,85,247,0.15) 95%, rgba(168,85,247,0.15) 100%)',
+                                    WebkitMask:
+                                        'radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px))',
+                                    mask: 'radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 5px))',
+                                }}
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                            />
+                        </div>
+
+                        {/* Photo frame — clean 1px border, restrained shadow.
+                            Sits in its own stacking context (z-10), not a
+                            child of the rotating ring above. */}
+                        <div className="w-full h-full rounded-full bg-white dark:bg-slate-950 p-[3px] shadow-xl ring-1 ring-black/5 dark:ring-white/10 relative z-10">
+                            <div className="w-full h-full rounded-full overflow-hidden border border-slate-200 dark:border-white/10">
                                 <img
                                     src="/nayem.jpg"
                                     alt="Nayem Ahmmed"
                                     className="w-full h-full object-cover scale-110"
                                 />
                             </div>
+                        </div>
+
+                        {/* Location badge — kept completely outside the ring's
+                            rotating wrapper, normal static layout, no motion
+                            of its own at all (only the small green status
+                            dot pulses, same as the reference image). */}
+                        <div
+                            className="hero-badge absolute -bottom-2 -right-2 md:right-0 z-20 flex flex-row items-center gap-2 px-4 py-2 rounded-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200 dark:border-white/10 shadow-lg"
+                            style={{ transform: 'none' }}
+                        >
+                            <span className="relative flex h-2 w-2 shrink-0">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                            </span>
+                            <MapPin size={14} className="text-blue-600 dark:text-blue-400 shrink-0" />
+                            <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 whitespace-nowrap">
+                                Based in Bangladesh
+                            </span>
                         </div>
                     </motion.div>
                 </div>

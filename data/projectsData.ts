@@ -15,7 +15,7 @@ export const allProjects: Project[] = [
     id: 'the-venture-connect',
     title: 'The Venture Connect',
     description: 'A role-based platform where founders can create opportunities, collaborators can apply, and admins can manage the entire ecosystem.',
-    tags: ['TypeScript', 'Next.js', 'Node.js', 'React.js', 'MongoDB', 'Express.js'],
+    tags: ['JavaScript', 'Next.js', 'Node.js', 'React.js', 'MongoDB', 'Express.js'],
     link: 'https://venture-connect-client.vercel.app',
     github: 'https://github.com/nayem0087/venture-connect-client',
     image: '/venture-connect.jpeg',

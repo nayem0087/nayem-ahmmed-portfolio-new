@@ -44,10 +44,10 @@ type ParticleState = {
 // (px/frame), no connecting lines — dots simply rise from the bottom to
 // the top of the screen. All dots share one color by default; pass a
 // multi-entry `colors` array if you want a mixed-color field instead.
-const DEFAULT_SIZE_RANGE: [number, number] = [0.9, 2.4];
-const DEFAULT_SPEED_RANGE: [number, number] = [0.6, 1.5];
-const DEFAULT_OPACITY_RANGE: [number, number] = [0.3, 0.85];
-const DEFAULT_COUNT = 4;
+const DEFAULT_SIZE_RANGE: [number, number] = [1.5, 2.4];
+const DEFAULT_SPEED_RANGE: [number, number] = [1.6, 2.5];
+const DEFAULT_OPACITY_RANGE: [number, number] = [1.0, 1.5];
+const DEFAULT_COUNT = 0;
 // How far below the viewport a dot can spawn, as a multiple of the
 // viewport height — this is the "max distance" knob now that the old
 // connecting-line maxDistance no longer applies (lines were removed).
@@ -57,7 +57,7 @@ const DEFAULT_SPAWN_DEPTH = 1.3;
 const THEME_PRESETS = {
   dark: {
     glow: 8,
-    colors: ['rgba(168,85,247,0.95)'], // violet — single color by default
+    colors: ['rgb(62, 62, 250)'], // violet — single color by default
   },
   light: {
     glow: 3,
