@@ -1,107 +1,67 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback, useState } from 'react';
-
-/**
- * ParticlesBackground
- * --------------------
- * A production-grade, performant ambient particle background.
- *
- * Why this differs from a typical "350 x <motion.div>" implementation:
- *  - 350 separate Framer Motion nodes each run their own animation loop,
- *    trigger layout/paint, and hold a JS timer. That's extremely heavy
- *    on low/mid-end devices and causes jank, especially on mobile.
- *  - This version renders every particle on a single <canvas> with one
- *    requestAnimationFrame loop, which is the standard, scalable approach
- *    for ambient particle effects (used by libraries like tsparticles).
- *
- * Features:
- *  - Single RAF loop, GPU-friendly canvas compositing
- *  - Respects `prefers-reduced-motion` (falls back to a static / no-op render)
- *  - Debounced resize handling with devicePixelRatio scaling (crisp on retina)
- *  - Cleans up all listeners / RAF on unmount (no leaks)
- *  - Pauses when the tab is hidden (saves battery/CPU)
- *  - Fully configurable via props, sane defaults preserve original look
- *  - SSR-safe (no `window`/`document` access during render)
- *  - Theme-aware: works on both light and dark backgrounds. Pass `theme="light"`
- *    or `theme="dark"` explicitly, or leave `theme="auto"` (default) to follow
- *    the OS/browser `prefers-color-scheme`, updating live if it changes.
- *  - Depth-layered ("parallax") particles: each dot is assigned a random depth.
- *    Nearer particles are bigger, brighter and drift faster; farther ones are
- *    smaller, dimmer and slower. This reads as a polished, layered starfield
- *    instead of a flat wall of identical dots — the standard technique used
- *    in premium hero-section backgrounds.
- *
- * NOTE ON DENSITY (updated):
- *  The previous defaults (count=800, opacityRange up to 0.9, glow=8) read as
- *  too dense/bright for most layouts. Defaults below are tuned for a subtle,
- *  ambient feel: fewer particles, lower opacity ceiling, softer glow. Pass
- *  props to override if you want it denser/brighter again.
- */
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 export interface ParticlesBackgroundProps {
-  /** Number of particles to render. Default: 200 (subtle, ambient density). */
   count?: number;
   /**
-   * Particle color (any valid CSS color). If omitted, a sensible default is
-   * chosen automatically based on `theme` (white on dark, dark slate on light).
+   * Palette of colors particles are randomly assigned from — this is what
+   * makes the field colorful instead of a single flat hue. Falls back to a
+   * theme-appropriate vibrant palette if omitted. If you pass the old
+   * single `color` prop instead, it's used as a one-color palette.
    */
+  colors?: string[];
+  /** @deprecated Use `colors` for a multi-color field. Still works as a single-color override. */
   color?: string;
-  /** Min/max particle radius in px, at closest depth. Default: [0.5, 1.8] */
   sizeRange?: [number, number];
-  /** Min/max vertical drift speed (px/sec), at closest depth. Default: [8, 20] */
+  /** Vertical rise speed range, in px/frame. Default: [0.6, 1.5] (moderate) */
   speedRange?: [number, number];
-  /** Min/max base opacity, at farthest/closest depth. Default: [0.08, 0.5] */
   opacityRange?: [number, number];
-  /** Glow blur amount in px. If omitted, chosen automatically based on `theme`. */
   glow?: number;
-  /**
-   * Which color scheme to render for.
-   * - 'dark': bright particles, glowing, for dark backgrounds (original look)
-   * - 'light': muted dark particles, minimal glow, for light backgrounds
-   * - 'auto' (default): follows `prefers-color-scheme` and updates live
-   */
   theme?: 'light' | 'dark' | 'auto';
-  /** Top-left ambient blob color. If omitted, chosen automatically based on `theme`. */
-  blobColorTopLeft?: string;
-  /** Bottom-right ambient blob color. If omitted, chosen automatically based on `theme`. */
-  blobColorBottomRight?: string;
-  /** Extra classnames for the outer wrapper */
   className?: string;
+  /**
+   * How far below the viewport a dot can spawn/respawn, as a multiple of
+   * the viewport height. Default: 1.3
+   */
+  spawnDepth?: number;
 }
 
 type ParticleState = {
   x: number;
   y: number;
-  baseX: number;
   size: number;
-  speed: number;
-  phase: number;
-  swayAmplitude: number;
-  /** 0 = farthest layer, 1 = nearest layer. Drives size/speed/opacity. */
+  vx: number;
+  vy: number;
   depth: number;
   baseOpacity: number;
+  color: string;
 };
 
-// Tuned down from the original [0.5, 2] / [10, 28] / [0.15, 0.9] so the field
-// reads as a light ambient dusting rather than a dense, bright wall of dots.
-const DEFAULT_SIZE_RANGE: [number, number] = [0.5, 1.8];
-const DEFAULT_SPEED_RANGE: [number, number] = [8, 20];
-const DEFAULT_OPACITY_RANGE: [number, number] = [0.08, 0.5];
-const DEFAULT_COUNT = 200;
+// Size/opacity/glow kept at original values — only the particle count is
+// reduced, so each dot still looks the same size as before, there are just
+// fewer of them on screen. Speed range is a moderate upward drift
+// (px/frame), no connecting lines — dots simply rise from the bottom to
+// the top of the screen. All dots share one color by default; pass a
+// multi-entry `colors` array if you want a mixed-color field instead.
+const DEFAULT_SIZE_RANGE: [number, number] = [0.9, 2.4];
+const DEFAULT_SPEED_RANGE: [number, number] = [0.6, 1.5];
+const DEFAULT_OPACITY_RANGE: [number, number] = [0.3, 0.85];
+const DEFAULT_COUNT = 4;
+// How far below the viewport a dot can spawn, as a multiple of the
+// viewport height — this is the "max distance" knob now that the old
+// connecting-line maxDistance no longer applies (lines were removed).
+// Bigger = dots start further down and take longer to rise into view.
+const DEFAULT_SPAWN_DEPTH = 1.3;
 
 const THEME_PRESETS = {
   dark: {
-    color: 'rgba(168,85,247,0.9)', // violet-500 — matches the reference screenshot
-    glow: 4,
-    blobColorTopLeft: 'rgba(139,92,246,0.10)',
-    blobColorBottomRight: 'rgba(88,28,135,0.14)',
+    glow: 8,
+    colors: ['rgba(168,85,247,0.95)'], // violet — single color by default
   },
   light: {
-    color: 'rgba(109,40,217,0.45)', // violet-800 at low opacity for light backgrounds
-    glow: 1.5,
-    blobColorTopLeft: 'rgba(139,92,246,0.06)',
-    blobColorBottomRight: 'rgba(88,28,135,0.06)',
+    glow: 3,
+    colors: ['rgba(109,40,217,0.6)'], // violet — single color by default
   },
 } as const;
 
@@ -111,15 +71,15 @@ function randomBetween(min: number, max: number): number {
 
 export default function ParticlesBackground({
   count = DEFAULT_COUNT,
+  colors,
   color,
   sizeRange = DEFAULT_SIZE_RANGE,
   speedRange = DEFAULT_SPEED_RANGE,
   opacityRange = DEFAULT_OPACITY_RANGE,
   glow,
   theme = 'auto',
-  blobColorTopLeft,
-  blobColorBottomRight,
   className = '',
+  spawnDepth = DEFAULT_SPAWN_DEPTH,
 }: ParticlesBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const particlesRef = useRef<ParticleState[]>([]);
@@ -127,7 +87,6 @@ export default function ParticlesBackground({
   const lastTimeRef = useRef<number>(0);
   const sizeRef = useRef({ width: 0, height: 0, dpr: 1 });
 
-  // Resolve 'auto' against the OS/browser color-scheme preference, live.
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
@@ -143,35 +102,42 @@ export default function ParticlesBackground({
   }, [theme]);
 
   const preset = THEME_PRESETS[resolvedTheme];
-  const resolvedColor = color ?? preset.color;
+  // Precedence: explicit `colors` array > legacy single `color` (used as a
+  // one-color palette) > theme's default multi-color palette.
+  const resolvedColors = colors ?? (color ? [color] : preset.colors);
   const resolvedGlow = glow ?? preset.glow;
-  const resolvedBlobTopLeft = blobColorTopLeft ?? preset.blobColorTopLeft;
-  const resolvedBlobBottomRight = blobColorBottomRight ?? preset.blobColorBottomRight;
+
+  const pickColor = useCallback(
+    () => resolvedColors[Math.floor(Math.random() * resolvedColors.length)],
+    [resolvedColors]
+  );
 
   const initParticles = useCallback(
     (width: number, height: number) => {
       particlesRef.current = Array.from({ length: count }, () => {
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        // depth: 0 = farthest (small, dim, slow), 1 = nearest (big, bright, fast).
-        // Weighted toward smaller/farther particles so the field reads as a
-        // natural distribution rather than everything looking the same size.
-        const depth = Math.pow(Math.random(), 1.6);
+        const depth = Math.random();
+        const speed = randomBetween(speedRange[0], speedRange[1]);
         return {
-          x,
-          y,
-          baseX: x,
+          x: Math.random() * width,
+          // Spawn below the viewport, up to spawnDepth screen-heights
+          // further down, so on page load — and on every reload — the
+          // dots visibly rise in from the bottom rather than already
+          // being in place.
+          y: height + Math.random() * height * spawnDepth,
           size: sizeRange[0] + (sizeRange[1] - sizeRange[0]) * depth,
-          speed: speedRange[0] + (speedRange[1] - speedRange[0]) * depth,
-          phase: Math.random() * Math.PI * 2,
-          swayAmplitude: randomBetween(4, 20),
+          // Rising motion: negative vy moves the dot upward each frame.
+          // A slight negative-to-positive vx gives it a gentle horizontal
+          // sway instead of a perfectly straight line, which reads as more
+          // natural than a rigid vertical path.
+          vx: randomBetween(-0.25, 0.25),
+          vy: -speed,
           depth,
-          baseOpacity:
-            opacityRange[0] + (opacityRange[1] - opacityRange[0]) * depth,
+          baseOpacity: opacityRange[0] + (opacityRange[1] - opacityRange[0]) * depth,
+          color: pickColor(),
         };
       });
     },
-    [count, sizeRange, speedRange, opacityRange]
+    [count, sizeRange, speedRange, opacityRange, spawnDepth, pickColor]
   );
 
   useEffect(() => {
@@ -181,32 +147,7 @@ export default function ParticlesBackground({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-    // --- Pre-render a soft radial "glow" sprite once, offscreen. ---
-    // Stamping this with drawImage per-particle is far cheaper than setting
-    // ctx.shadowBlur + filling a shape per-particle every frame, which is a
-    // well-known perf cliff in Canvas2D (especially on Safari/mobile) once
-    // you're drawing hundreds of glowing shapes per frame.
-    const SPRITE_SIZE = 64;
-    const spriteCanvas = document.createElement('canvas');
-    spriteCanvas.width = SPRITE_SIZE;
-    spriteCanvas.height = SPRITE_SIZE;
-    const spriteCtx = spriteCanvas.getContext('2d');
-    if (spriteCtx) {
-      const cx = SPRITE_SIZE / 2;
-      const cy = SPRITE_SIZE / 2;
-      const gradient = spriteCtx.createRadialGradient(cx, cy, 0, cx, cy, cx);
-      // Extract the rgb channel of resolvedColor so we can build a gradient
-      // that fades this exact hue out to fully transparent.
-      gradient.addColorStop(0, resolvedColor);
-      gradient.addColorStop(0.4, resolvedColor);
-      gradient.addColorStop(1, 'rgba(0,0,0,0)');
-      spriteCtx.fillStyle = gradient;
-      spriteCtx.fillRect(0, 0, SPRITE_SIZE, SPRITE_SIZE);
-    }
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -239,38 +180,37 @@ export default function ParticlesBackground({
 
       ctx.clearRect(0, 0, width, height);
 
-      for (const p of particlesRef.current) {
+      const particles = particlesRef.current;
+
+      // Update and draw particles — dots only, no connecting lines.
+      for (const p of particles) {
         if (!prefersReducedMotion) {
-          p.y -= p.speed * dt;
-          if (p.y < -10) {
-            p.y = height + 10;
-            p.baseX = Math.random() * width;
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // Wrap horizontally so gentle sway never carries a dot off-screen.
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+
+          // Once a dot rises past the top, respawn it below the viewport
+          // (not immediately at the bottom edge) with a fresh random x and
+          // color, so entries stay staggered instead of all lining up.
+          if (p.y < -p.size) {
+            p.y = height + Math.random() * height * spawnDepth * 0.3;
+            p.x = Math.random() * width;
+            p.color = pickColor();
           }
-          p.phase += dt * (0.4 + p.depth * 0.4);
-          p.x = p.baseX + Math.sin(p.phase) * p.swayAmplitude;
         }
 
-        // Gentle twinkle around each particle's own base opacity, plus a
-        // wider glow halo for nearer (larger) particles.
-        const twinkle = 0.75 + 0.25 * Math.sin(p.phase * 1.3);
-        ctx.globalAlpha = p.baseOpacity * twinkle;
+        ctx.globalAlpha = p.baseOpacity;
+        ctx.fillStyle = p.color;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = resolvedGlow;
 
-        const haloSize = p.size * (4 + p.depth * (resolvedGlow / 2));
-        ctx.drawImage(
-          spriteCanvas,
-          p.x - haloSize / 2,
-          p.y - haloSize / 2,
-          haloSize,
-          haloSize
-        );
-
-        // Crisp bright core on top of the soft halo, so particles still
-        // read as sharp points up close, not just blurry blobs.
-        ctx.globalAlpha = p.baseOpacity * twinkle;
-        ctx.fillStyle = resolvedColor;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       ctx.globalAlpha = 1;
@@ -304,21 +244,13 @@ export default function ParticlesBackground({
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
-  }, [resolvedColor, resolvedGlow, initParticles]);
+  }, [resolvedGlow, initParticles, pickColor, spawnDepth]);
 
   return (
     <div
       className={`fixed inset-0 pointer-events-none z-[1] overflow-hidden ${className}`}
       aria-hidden="true"
     >
-      <div
-        className="absolute top-0 left-0 w-[40vw] h-[40vw] rounded-full blur-[180px]"
-        style={{ backgroundColor: resolvedBlobTopLeft }}
-      />
-      <div
-        className="absolute bottom-0 right-0 w-[40vw] h-[40vw] rounded-full blur-[180px]"
-        style={{ backgroundColor: resolvedBlobBottomRight }}
-      />
       <canvas ref={canvasRef} className="absolute inset-0" />
     </div>
   );

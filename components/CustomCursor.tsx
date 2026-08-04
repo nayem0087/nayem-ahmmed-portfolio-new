@@ -3,41 +3,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
-/**
- * CustomCursor
- * ------------
- * A production-grade custom cursor with two layers:
- *  - A small dot that tracks the raw mouse position exactly (no lag).
- *  - A larger ring that follows with spring physics, giving that
- *    "smooth trailing" feel used in premium portfolio/agency sites.
- *
- * Why this differs from a typical `useState` + `motion.div` cursor:
- *  - Tracking mouse position with `useState` triggers a React re-render on
- *    every single `mousemove` event (dozens of times per second). That's
- *    wasted render work and is what makes DIY cursors feel janky under load.
- *  - This version uses Framer Motion's `useMotionValue` / `useSpring`, which
- *    update the DOM directly outside React's render cycle — zero re-renders
- *    while the mouse moves, buttery smooth even on busy pages.
- *
- * Features:
- *  - Dot (exact) + ring (spring-lagged) dual-layer cursor
- *  - Hover state: ring grows and fills when over any element marked
- *    `data-cursor-hover` (button, a, or anything you tag)
- *  - Click state: quick scale-down "press" feedback
- *  - Hides entirely on touch/coarse-pointer devices (no phantom cursor)
- *  - Hides when the pointer leaves the window (no stuck cursor at the edge)
- *  - Respects `prefers-reduced-motion` (falls back to instant positioning,
- *    no spring lag, since motion-sensitive users shouldn't get trailing FX)
- *  - Forces `cursor: none` globally (via an injected stylesheet, not just
- *    on <html>) so buttons/links/inputs with their own explicit cursor
- *    style can't make the native cursor reappear over them
- *  - Optional particle trail: small glowing dots spurt from the pointer as
- *    it moves, denser while hovering an interactive element. Rendered on a
- *    single <canvas> with one RAF loop (same technique as a starfield
- *    background) so it stays smooth even with many trail particles alive
- *    at once.
- */
-
 type TrailParticle = {
   x: number;
   y: number;
@@ -87,7 +52,7 @@ export default function CustomCursor({
   trailSpawnRate = 1,
   trailHoverSpawnRate = 3,
   trailSizeRange = [1, 3],
-  trailLifeMs = 600,
+  trailLifeMs = 500,
 }: CustomCursorProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovering, setIsHovering] = useState(false);

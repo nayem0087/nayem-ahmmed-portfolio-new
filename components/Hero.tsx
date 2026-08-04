@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaTwitter, FaFacebook } from 'react-icons/fa';
-import { Download } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import gsap from 'gsap';
 import SplitType from 'split-type';
 import Magnetic from '@/components/animations/Magnetic';
@@ -197,7 +197,7 @@ export default function Hero() {
                                 download
                                 className="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-gray-300 dark:border-white/20 text-gray-700 dark:text-gray-200 font-bold rounded-full hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
                             >
-                                <Download size={16} /> Download Resume
+                                <Eye size={16} /> Browse Resume
                             </a>
                         </Magnetic>
                     </div>
